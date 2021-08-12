@@ -11,7 +11,7 @@
 
 .NavigationItem a:hover,
 .NavigationItem a:focus,
-.NavigationItem a:active
+.NavigationItem a.selected
 {
     color : #716F81;
 }

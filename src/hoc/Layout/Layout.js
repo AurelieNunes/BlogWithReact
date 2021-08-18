@@ -1,22 +1,23 @@
-//Librairie
+// Librairie
 import React from 'react';
 import classes from './Layout.module.css';
 
-// Component
-import Header from '../../Components/Header/Header.js';
 
-function Layout (props) {
+// Composant
+import Header from '../../Components/Header/Header';
+import Footer from '../../Components/Footer/Footer';
+
+function Layout(props) {
     return (
-    <div>
-        <>
-            <Header/>
+        <div className={classes.Layout}>
+            <Header />
 
-            {props.children}
+            <div className={classes.content}>
+                {props.children}
+            </div>
 
-            {/* Footer */}
-        </>
-
-    </div>
+            <Footer />
+        </div>
     );
 }
 

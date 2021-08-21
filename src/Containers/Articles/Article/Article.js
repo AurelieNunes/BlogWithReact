@@ -4,7 +4,6 @@ import axios from '../../../config/axios-firebase';
 import routes from '../../../config/routes';
 import classes from './Article.module.css';
 import { Link, withRouter } from 'react-router-dom';
-import fire from '../../../config/firebase';
 
 function Article(props) {
 
@@ -29,7 +28,7 @@ function Article(props) {
                 console.log(error);
             });
 
-    }, []);
+    },[]);
 
     // Fonctions
     const deleteClickedHandler = () => {

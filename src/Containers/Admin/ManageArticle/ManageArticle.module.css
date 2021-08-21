@@ -10,7 +10,6 @@
 .submit {
     text-align: right;
 }
-
 .submit input {
     border: 0;
     padding: 10px 15px;
@@ -20,12 +19,10 @@
     border-radius: 4px;
     cursor: pointer;
 }
-
 .submit input:disabled {
     opacity: .3;
     cursor: not-allowed;
 }
-
 .submit input:focus,
 .submit input:hover {
     background-color: #d3450d;

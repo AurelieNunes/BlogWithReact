@@ -1,8 +1,10 @@
 // Librairie
 import React, { useState } from 'react';
+import { checkValidity } from '../../../shared/utility'
 import classes from './ManageArticle.module.css';
 import axios from '../../../config/axios-firebase';
 import routes from '../../../config/routes';
+import fire from '../../../config/firebase';
 
 // Composant
 import Input from '../../../Components/UI/Input/Input';
@@ -85,25 +87,6 @@ function ManageArticle(props) {
     });
     const [valid, setValid] = useState(props.location.state && props.location.state.article ? true : false);
 
-    // Fonctions
-    const checkValidity = (value, rules) => {
-        let isValid = true;
-
-        if(rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if(rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        if(rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        return isValid;
-    }
-
     const inputChangedHandler = (event, id) => {
 
         // Change la valeur
@@ -158,26 +141,32 @@ function ManageArticle(props) {
             slug: slug
         };
 
-        if(props.location.state && props.location.state.article) {
-            axios.put('/articles/' + props.location.state.article.id + '.json', article)
-            .then(response => {
-                console.log(response);
-                props.history.replace(routes.ARTICLES + '/' + article.slug);
+        fire.auth().currentUser.getIdToken()
+            .then(token=>{
+                if(props.location.state && props.location.state.article) {
+                    axios.put('/articles/' + props.location.state.article.id + '.json', article)
+                    .then(response => {
+                        console.log(response);
+                        props.history.replace(routes.ARTICLES + '/' + article.slug);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }
+                else {
+                    axios.post('/articles.json?auth=' + token, article)
+                        .then(response => {
+                            console.log(response);
+                            props.history.replace(routes.ARTICLES);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
             })
             .catch(error => {
-                console.log(error);
-            });
-        }
-        else {
-            axios.post('/articles.json', article)
-                .then(response => {
-                    console.log(response);
-                    props.history.replace(routes.ARTICLES);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
+                console.log(error)
+            })
     }
 
     // Variables

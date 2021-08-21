@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../../config/axios-firebase';
 import routes from '../../../config/routes';
 import classes from './Article.module.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import fire from '../../../config/firebase';
 
 function Article(props) {
 
@@ -32,15 +33,20 @@ function Article(props) {
 
     // Fonctions
     const deleteClickedHandler = () => {
-        
-        axios.delete('/articles/' + article.id + '.json')
-            .then(response => {
-                props.history.push(routes.HOME);
-            })
-            .catch(error => {
-                console.log(error);
-            });
 
+        props.user.getIdToken()
+            .then(token => {
+                axios.delete('/articles/' + article.id + '.json?auth=' + token)
+                .then(response => {
+                    props.history.push(routes.HOME);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            })
+            .catch(error=> {
+                console.log(error);
+            }) 
     }
 
     // Variable
@@ -72,10 +78,10 @@ function Article(props) {
                 <span>
                     Publié le {date}.
                 </span>
-                {article.brouillon == "true" ? <span className = {classes.badge}>Brouillon</span> : null}
+                {article.brouillon === "true" ? <span className = {classes.badge}>Brouillon</span> : null}
             </div>
         </div>
     );
 }
 
-export default Article;
+export default withRouter(Article);
